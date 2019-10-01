@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Max;
 import java.time.LocalDateTime;
 
 @Builder
@@ -19,6 +20,7 @@ public class EventDto {
     private LocalDateTime beginEventDateTime;
     private LocalDateTime endEventDateTime;
     private String location; // (optional) 이게 없으면 온라인 모임
+    @Max(50)
     private int basePrice; // (optional)
     private int maxPrice; // (optional)
     private int limitOfEnrollment;
