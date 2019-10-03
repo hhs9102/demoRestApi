@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Max;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
 @Builder
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 public class EventDto {
+    @NotEmpty
     private String name;
     private String description;
     private LocalDateTime beginEnrollmentDateTime;
