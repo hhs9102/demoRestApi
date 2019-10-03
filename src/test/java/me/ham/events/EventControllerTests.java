@@ -139,8 +139,9 @@ public class EventControllerTests {
         EventDto eventDto = EventDto.builder()
                 .name("hsham")
                 .description("REST API Development with Spring")
-                .beginEnrollmentDateTime(LocalDateTime.of(2019,10,3,10,5,0))
-                .closeEnrollmentDateTime(LocalDateTime.of(2019,10,1,10,5,0))
+                .beginEnrollmentDateTime(LocalDateTime.of(2019,10,5,10,5,0))
+                .closeEnrollmentDateTime(LocalDateTime.of(2019,10,6,10,5,0))
+                .endEventDateTime(LocalDateTime.of(2019,10,3,15,0,0))
                 .build();
 
         this.mockMvc.perform(post("/api/events")
