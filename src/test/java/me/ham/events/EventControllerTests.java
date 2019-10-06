@@ -62,7 +62,8 @@ public class EventControllerTests {
                 .andExpect(header().string("Content-Type", MediaTypes.HAL_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("id").exists())
                 .andExpect(jsonPath("id").value(Matchers.not(100)))
-                .andExpect(jsonPath("free").value(Matchers.not(true)))
+                .andExpect(jsonPath("free").value(false))   //가격이 있으니까
+                .andExpect(jsonPath("offline").value(true)) //location이 있으니까
                 .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()))
         ;
     }
