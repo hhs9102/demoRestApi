@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -177,7 +176,7 @@ public class EventControllerTests {
                             .param("page","1")
                             .param("size", "10")
                             .param("sort", "name,DESC")
-                        ) //0부터 시작
+                        ) // 0부터 시작
                         .andDo(print())
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("page").exists())
@@ -188,11 +187,38 @@ public class EventControllerTests {
                 ;
     }
 
-    private void generateEvent(int index){
+    private Event generateEvent(int index){
         Event event = Event.builder()
                 .name("test"+index)
                 .description("test Event" + index)
                 .build();
         this.eventRepository.save(event);
+
+        return event;
     }
+
+    @Test
+    @TestDescription("기존의 이벤트를 하나 조회하기")
+    public void getEvent() throws Exception{
+        //given
+        Event event = this.generateEvent(100);
+
+        this.mockMvc.perform(get("/api/events/{id}", event.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("name").exists())
+                .andExpect(jsonPath("id").exists())
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.profile").exists())
+        ;
+    }
+
+    @Test
+    @TestDescription("없는 이벤트 request시 404 에러")
+    public void getEvent404() throws Exception{
+        this.mockMvc.perform(get("/api/events/1298371893"))
+                .andExpect(status().isNotFound())
+        ;
+    }
+
+
 }
