@@ -1,6 +1,7 @@
 package me.ham.events;
 
 import lombok.*;
+import me.ham.accounts.Account;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -31,6 +32,10 @@ public class Event {
 
     @Enumerated(EnumType.STRING)
     private EventStatus eventStatus = EventStatus.DRAFT;
+
+    @ManyToOne
+    private Account manager;
+
 
     public void update() {
         if(this.basePrice == 0 && this.maxPrice ==0){
