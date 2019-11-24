@@ -1,5 +1,5 @@
 package me.ham.accounts;
 
-public enum AccountRule {
+public enum AccountRole {
     ADMIN, USER
 }

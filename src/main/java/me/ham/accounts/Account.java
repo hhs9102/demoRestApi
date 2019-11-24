@@ -22,5 +22,5 @@ public class Account {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(value = EnumType.STRING)
-    private Set<AccountRule> roles;
+    private Set<AccountRole> roles;
 }
