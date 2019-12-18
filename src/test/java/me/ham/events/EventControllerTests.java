@@ -4,6 +4,7 @@ import me.ham.accounts.Account;
 import me.ham.accounts.AccountRepository;
 import me.ham.accounts.AccountRole;
 import me.ham.accounts.AccountService;
+import me.ham.common.AppProperties;
 import me.ham.common.BaseControllerTest;
 import me.ham.common.TestDescription;
 import org.hamcrest.Matchers;
@@ -39,6 +40,9 @@ public class EventControllerTests  extends BaseControllerTest {
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    AppProperties appProperties;
 
     @Before
     public void setUp(){
@@ -82,11 +86,8 @@ public class EventControllerTests  extends BaseControllerTest {
     }
 
     private String getBaererToken() throws Exception {
-        String clientId = "myApp";
-        String clientSecret = "pass";
-
-        String username = "hhs9102@naver.com";
-        String password = "pass";
+        String username = appProperties.getUserUsername();
+        String password = appProperties.getUserPassword();
         Account account = Account.builder()
                 .email(username)
                 .password(password)
@@ -97,7 +98,7 @@ public class EventControllerTests  extends BaseControllerTest {
         accountService.saveAccount(account);
 
         ResultActions perform = this.mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(clientId, clientSecret))
+                .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
                 .param("username", username)
                 .param("password", password)
                 .param("grant_type", "password"));

@@ -3,6 +3,7 @@ package me.ham.configs;
 import me.ham.accounts.Account;
 import me.ham.accounts.AccountRole;
 import me.ham.accounts.AccountService;
+import me.ham.common.AppProperties;
 import me.ham.common.BaseControllerTest;
 import me.ham.common.TestDescription;
 import org.junit.Test;
@@ -24,32 +25,32 @@ public class AuthServerConfigTest extends BaseControllerTest {
     AccountService accountService;
 
     @Autowired
+    AppProperties appProperties;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @Test
     @TestDescription("인증 토큰을 발급 받는 테스트")
     public void getAuthToken() throws Exception {
-        String clientId = "myApp";
-        String clientSecret = "pass";
 
-        String username = "hhs9102@naver.com";
-        String password = "pass";
-        Account account = Account.builder()
-                .email(username)
-                .password(password)
-                .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
-                .build()
-                ;
-
-        accountService.saveAccount(account);
+        //Given
+//        Account account = Account.builder()
+//                .email(appProperties.getUserUsername())
+//                .password(appProperties.getUserPassword())
+//                .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
+//                .build()
+//                ;
+//
+//        accountService.saveAccount(account);
 
         System.out.println("@@@@@@@@@@");
         System.out.println(passwordEncoder.encode("pass").toString());
 
         this.mockMvc.perform(post("/oauth/token")
-                        .with(httpBasic(clientId, clientSecret))
-                        .param("username", username)
-                        .param("password", password)
+                        .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
+                        .param("username", appProperties.getUserUsername())
+                        .param("password", appProperties.getUserPassword())
                         .param("grant_type", "password")
                 )   //basicAuth라는 헤더를 만듦
                 .andDo(print())
