@@ -22,7 +22,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
             .anonymous()
                 .and()
             .authorizeRequests()
-                .mvcMatchers(HttpMethod.GET, "/api/**").anonymous()
+                .mvcMatchers(HttpMethod.GET, "/api/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
             .exceptionHandling()    //인증이 잘못되거나 권한이 없는 경우 발생
