@@ -19,6 +19,9 @@ import org.springframework.security.oauth2.common.util.Jackson2JsonParser;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.IntStream;
 
@@ -167,6 +170,8 @@ public class EventControllerTests  extends BaseControllerTest {
     public void createEvent_Bad_Request_Empty_Input() throws Exception {
         EventDto eventDto = EventDto.builder()
                 .name("hsham")
+                .beginEventDateTime(LocalDateTime.now())
+                .endEventDateTime(LocalDateTime.now().plus(10, ChronoUnit.DAYS))
                 .build();
 
         this.mockMvc.perform(post("/api/events")
@@ -217,6 +222,29 @@ public class EventControllerTests  extends BaseControllerTest {
                         .andExpect(jsonPath("_embedded.eventList[0]._links.self").exists())
                         .andExpect(jsonPath("_links.self").exists())
                         .andExpect(jsonPath("_links.profile").exists())
+//                        .andDo(document("query-events"))
+                ;
+    }
+
+    @Test
+    @TestDescription("30개의 이벤트를 10개씩 두번째 페이지 조회하기")
+    public void queryEventsAuthentication() throws Exception{
+        IntStream.range(0, 30).forEach(this::generateEvent);
+
+        this.mockMvc.perform(get("/api/events/")
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer" + getBaererToken())
+                            .param("page","1")
+                            .param("size", "10")
+                            .param("sort", "name,DESC")
+                        ) // 0부터 시작
+                        .andDo(print())
+
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("page").exists())
+                        .andExpect(jsonPath("_embedded.eventList[0]._links.self").exists())
+                        .andExpect(jsonPath("_links.self").exists())
+                        .andExpect(jsonPath("_links.profile").exists())
+                        .andExpect(jsonPath("_links.create-event").exists())
 //                        .andDo(document("query-events"))
                 ;
     }
@@ -329,7 +357,6 @@ public class EventControllerTests  extends BaseControllerTest {
                         .eventStatus(EventStatus.DRAFT)
                         .build();
         this.eventRepository.save(event);
-
         return event;
     }
 }

@@ -19,6 +19,12 @@ public class EventValidation {
             errors.rejectValue("basePrice", "wrongValue", "basePrice is wrong."); //field Error에 들어감
             errors.rejectValue("maxPrice", "wrongValue", "maxPrice is wrong.");
             errors.reject("wrongPrices", "Values for price wrong"); //global Error에 들어감
+        }else if(eventDto.getBeginEnrollmentDateTime() == null
+        ||eventDto.getCloseEnrollmentDateTime() == null
+        ||eventDto.getBeginEventDateTime() == null
+        ||eventDto.getEndEventDateTime() == null
+        ){
+            errors.reject("dateTime", "DateTime must be exists");
         }else if(eventDto.getEndEventDateTime().isBefore(eventDto.getBeginEnrollmentDateTime())
         ||eventDto.getEndEventDateTime().isBefore(eventDto.getCloseEnrollmentDateTime())
         ||eventDto.getEndEventDateTime().isBefore(eventDto.getBeginEnrollmentDateTime())

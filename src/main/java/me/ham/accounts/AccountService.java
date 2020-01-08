@@ -33,7 +33,7 @@ public class AccountService implements UserDetailsService {
         Account account  = accountRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
 
-        return new User(account.getEmail(), account.getPassword(), autorities(account.getRoles()));
+        return new AccountAdapter(account);
     }
 
     private Collection<? extends GrantedAuthority> autorities(Set<AccountRole> roles) {
