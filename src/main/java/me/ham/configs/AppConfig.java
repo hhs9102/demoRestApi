@@ -10,13 +10,31 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Set;
 
 @Configuration
 public class AppConfig {
+
+    @Bean
+    public RestTemplate restTemplate(){
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+        factory.setReadTimeout(3*1000);
+        factory.setConnectTimeout(1000);
+        return new RestTemplate(factory);
+    }
+    @Bean
+    public RestTemplate restTemplateLongReadTimeOut(){
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+        factory.setReadTimeout(10*1000);
+        factory.setConnectTimeout(1000);
+        return new RestTemplate(factory);
+    }
+
 
     @Bean
     public PasswordEncoder passwordEncoder(){
